@@ -45,11 +45,11 @@ public class InstantMessenger {
             }
             if   (sender.GetdestinationAddress().isEmpty()) {
                 JOptionPane.showMessageDialog(frame,
-                        "Введитеадресузла-получателя", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                        "Введите адрес узла-получателя", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if   (message.isEmpty()) { JOptionPane.showMessageDialog(frame,
-                    "Введитетекстсообщения", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                    "Введите текст сообщения", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             // Создаем сокет для соединения
@@ -63,7 +63,7 @@ public class InstantMessenger {
             // Закрываем сокет
             socket.close();
             // Помещаем сообщения в текстовую область вывода
-            frame.getTextAreaIncoming().append("Я -> " +sender.GetdestinationAddress() + ": " + message + "\n");
+            frame.appendMessage("Я -> " + sender.GetdestinationAddress()+ ": "+message);
             // Очищаем текстовую область ввода сообщения
             frame.getTextAreaOutgoing().setText("");
         }catch(UnknownHostException e) {
@@ -97,7 +97,7 @@ public class InstantMessenger {
                                 .getAddress()
                                 .getHostAddress();
                         // Выводим сообщение в текстовую область
-                        frame.getTextAreaIncoming().append(senderName +  " ("   + address + "): " +  message + "\n");
+                        frame.appendMessage(senderName +  " ("   + address + "): " +  message);
                     }
                 } catch(IOException e) {
                     e.printStackTrace(); JOptionPane.showMessageDialog(frame,

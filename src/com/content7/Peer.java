@@ -9,7 +9,6 @@ import java.net.UnknownHostException;
 public class Peer {
     private  String sender;
     private  String destinationAddress;
-
     public void SetSender(String sender){
         this.sender=sender;
     }

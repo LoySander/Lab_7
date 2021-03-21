@@ -10,17 +10,11 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import javax.swing.text.*;
+import javax.swing.text.html.*;
+import javax.swing.ImageIcon;
+
 @SuppressWarnings("serial")
 
 public class MainFrame extends JFrame {
@@ -37,20 +31,25 @@ public class MainFrame extends JFrame {
     private static final int SERVER_PORT= 4567;
     private final JTextField textFieldFrom;
     private final JTextField textFieldTo;
-    private final JTextArea textAreaIncoming;
+    private final JEditorPane textAreaIncoming;
     private final JTextArea textAreaOutgoing;
     private InstantMessenger refactoring;
     private Peer client;
+    private ImageIcon icon;
+    private StringBuffer incomingText;
     public MainFrame() {
         super(FRAME_TITLE);
         client = new Peer();
+        icon = new ImageIcon("Smile.png");
+        incomingText = new StringBuffer();
+        // Текстовая область для отображения полученных сообщений;
+        textAreaIncoming = new JEditorPane();
+        textAreaIncoming.setContentType("text/html");
+        textAreaIncoming.setEditable(false);
         setMinimumSize( new Dimension(FRAME_MINIMUM_WIDTH, FRAME_MINIMUM_HEIGHT));
         // Центрирование окна
         final Toolkit kit = Toolkit.getDefaultToolkit();
         setLocation((kit.getScreenSize().width - getWidth()) / 2, (kit.getScreenSize().height - getHeight()) / 2);
-        // Текстовая область для отображения полученных сообщений
-        textAreaIncoming = new JTextArea(INCOMING_AREA_DEFAULT_ROWS, 0);
-        textAreaIncoming.setEditable(false);
         // Контейнер, обеспечивающий прокрутку текстовой области
         final JScrollPane scrollPaneIncoming =  new JScrollPane(textAreaIncoming);
         // Подписиполей
@@ -120,6 +119,7 @@ public class MainFrame extends JFrame {
                 .addComponent(messagePanel)
                 .addContainerGap());
        refactoring = new InstantMessenger(this);
+
        
         // Создание и запуск потока-обработчика запросов
         /*new Thread(new Runnable() {
@@ -156,9 +156,29 @@ public class MainFrame extends JFrame {
     public int getServerPort() {
         return SERVER_PORT;
     }
-    public JTextArea getTextAreaIncoming() {
+    public JEditorPane getTextAreaIncoming() {
         return textAreaIncoming;
     }
+    public void appendMessage(String message){
+        String smile = ":)";
+        while(message.contains(smile)) {
+            int pos = message.indexOf(smile);
+            System.out.println(pos);
+            message = message.substring(0, pos) + "<img src=\"src/com/content7/angel.png\" width=1 height=1>"  + message.substring(pos+2);
+        }
+        String smile1 = "8-)";
+        while(message.contains(smile1)) {
+            int pos = message.indexOf(smile1);
+            System.out.println(pos);
+            message = message.substring(0, pos) + "<img src=\"src/com/content7/angel.png\" width=25 height=25>"  + message.substring(pos+3);
+        }
+        String text = message;
+        //"<img src=\"file:\\f:\\angel.PNG\" width=1 height=1>"
+        textAreaIncoming.setText(text);
+
+    }
+    //"<img src=\"file:\\f:\\angel.PNG\" width=1 height=1>"
+    //<img src="C:\Users\37529\IdeaProjects\Lab_7\src\com\content7\Smile.png" width=1 height=1> "<img src=\"src/com/content7/Smile.png\" width=25 height=25>"
    /* private void sendMessage() {
         try{
             // Получае мне обходимые параметры
