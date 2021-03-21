@@ -24,7 +24,7 @@ import javax.swing.SwingUtilities;
 @SuppressWarnings("serial")
 
 public class MainFrame extends JFrame {
-    private static final String FRAME_TITLE= "Клиентмгновенныхсообщений";
+    private static final String FRAME_TITLE= "Клиент мгновенных сообщений";
     private static final int FRAME_MINIMUM_WIDTH= 500;
     private static final int FRAME_MINIMUM_HEIGHT= 500;
     private static final int FROM_FIELD_DEFAULT_COLUMNS= 10;
@@ -39,8 +39,11 @@ public class MainFrame extends JFrame {
     private final JTextField textFieldTo;
     private final JTextArea textAreaIncoming;
     private final JTextArea textAreaOutgoing;
+    private InstantMessenger refactoring;
+    private Peer client;
     public MainFrame() {
         super(FRAME_TITLE);
+        client = new Peer();
         setMinimumSize( new Dimension(FRAME_MINIMUM_WIDTH, FRAME_MINIMUM_HEIGHT));
         // Центрирование окна
         final Toolkit kit = Toolkit.getDefaultToolkit();
@@ -67,7 +70,9 @@ public class MainFrame extends JFrame {
         final JButton sendButton = new JButton("Отправить");
         sendButton.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
-                sendMessage();
+                client.SetSender(textFieldFrom.getText());
+                client.SetdestinationAddress(textFieldTo.getText());
+                refactoring.sendMessage(textAreaOutgoing.getText(),client);// ?
             }
         });
         // Компоновка элементов панели "Сообщение"
@@ -114,9 +119,10 @@ public class MainFrame extends JFrame {
                 .addGap(MEDIUM_GAP)
                 .addComponent(messagePanel)
                 .addContainerGap());
-
+       refactoring = new InstantMessenger(this);
+       
         // Создание и запуск потока-обработчика запросов
-        new Thread(new Runnable() {
+        /*new Thread(new Runnable() {
             @Override public void run() {
                 try {
                     final ServerSocket serverSocket =  new ServerSocket(SERVER_PORT);
@@ -139,12 +145,21 @@ public class MainFrame extends JFrame {
                     }
                 } catch(IOException e) {
                     e.printStackTrace(); JOptionPane.showMessageDialog(MainFrame.this,
-                            "Ошибкавработесервера", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                            "Ошибка в работе сервера", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 }
             }
-            }).start();
+            }).start();*/
         }
-    private void sendMessage() {
+    public JTextArea getTextAreaOutgoing() {
+        return textAreaOutgoing;
+    }
+    public int getServerPort() {
+        return SERVER_PORT;
+    }
+    public JTextArea getTextAreaIncoming() {
+        return textAreaIncoming;
+    }
+   /* private void sendMessage() {
         try{
             // Получае мне обходимые параметры
             final String senderName = textFieldFrom.getText();
@@ -188,5 +203,5 @@ public class MainFrame extends JFrame {
             JOptionPane.showMessageDialog(MainFrame.this,"Не удалось отправить сообщение",
                     "Ошибка",JOptionPane.ERROR_MESSAGE);
         }
-    }
+    }*/
 }
