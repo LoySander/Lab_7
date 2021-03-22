@@ -6,10 +6,8 @@ import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.nio.file.Paths;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
@@ -159,22 +157,40 @@ public class MainFrame extends JFrame {
     public JEditorPane getTextAreaIncoming() {
         return textAreaIncoming;
     }
-    public void appendMessage(String message){
+    public synchronized  void appendMessage(String message){
         String smile = ":)";
+
+        String oldmessage = textAreaIncoming.getText();
         while(message.contains(smile)) {
             int pos = message.indexOf(smile);
             System.out.println(pos);
-            message = message.substring(0, pos) + "<img src=\"src/com/content7/angel.png\" width=1 height=1>"  + message.substring(pos+2);
+            URL imgsrc= null;
+            try {
+                imgsrc = Paths.get("C:/Users/37529/IdeaProjects/Lab_7/src/com/content7/angel.png").toUri().toURL();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            //imgsrc = new File("angel.jpg").toURL().toExternalForm();
+            //imgsrc= MainFrame.class.getClassLoader().getSystemResource("angel.jpg").toString();
+            System.out.println(imgsrc);
+
+            message = message.substring(0, pos) +  "<img src='file:C:/Users/37529/IdeaProjects/Lab_7/src/com/content7/angel.png' alt='' name='angel' width='74' height='85' /><br />"  + message.substring(pos+2);
+            //message = message.substring(0, pos) + "<img src=\"src/com/content7/angel.webp\" width=1 height=1>"  + message.substring(pos+2);
+            //message = "<html><img src=imgscr width=200height=200></img>";
+
         }
-        String smile1 = "8-)";
+       /* String smile1 = "8-)";
         while(message.contains(smile1)) {
             int pos = message.indexOf(smile1);
             System.out.println(pos);
             message = message.substring(0, pos) + "<img src=\"src/com/content7/angel.png\" width=25 height=25>"  + message.substring(pos+3);
-        }
-        String text = message;
-        //"<img src=\"file:\\f:\\angel.PNG\" width=1 height=1>"
+        }*/
+        String html = "<span>" + message + "</span><br/>";
+        incomingText.insert(0, html);
+        String text  = incomingText.toString();
+        System.out.println(incomingText.toString()+"\n***"+"\n");
         textAreaIncoming.setText(text);
+        //textAreaIncoming.s
 
     }
     //"<img src=\"file:\\f:\\angel.PNG\" width=1 height=1>"

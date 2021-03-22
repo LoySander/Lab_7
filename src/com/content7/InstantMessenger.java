@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 public class InstantMessenger {
     private String sender;
     private MainFrame frame;
+    private String message;
     ArrayList<MessageListener> listeners = new ArrayList<MessageListener>();
 
 
@@ -52,6 +54,7 @@ public class InstantMessenger {
                     "Введите текст сообщения", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            frame.appendMessage("Я -> " + sender.GetdestinationAddress()+ ": "+message);
             // Создаем сокет для соединения
             final Socket socket =  new Socket(sender.GetdestinationAddress(), frame.getServerPort());
             // Открываем поток вывода данных
@@ -63,7 +66,8 @@ public class InstantMessenger {
             // Закрываем сокет
             socket.close();
             // Помещаем сообщения в текстовую область вывода
-            frame.appendMessage("Я -> " + sender.GetdestinationAddress()+ ": "+message);
+           //frame.appendMessage("Я -> " + sender.GetdestinationAddress()+ ": "+message);
+            //frame.getTextAreaIncoming().setText(message);
             // Очищаем текстовую область ввода сообщения
             frame.getTextAreaOutgoing().setText("");
         }catch(UnknownHostException e) {
@@ -97,6 +101,7 @@ public class InstantMessenger {
                                 .getAddress()
                                 .getHostAddress();
                         // Выводим сообщение в текстовую область
+
                         frame.appendMessage(senderName +  " ("   + address + "): " +  message);
                     }
                 } catch(IOException e) {
