@@ -179,12 +179,18 @@ public class MainFrame extends JFrame {
             //message = "<html><img src=imgscr width=200height=200></img>";
 
         }
-       /* String smile1 = "8-)";
+        String smile1 = "8-)";
         while(message.contains(smile1)) {
             int pos = message.indexOf(smile1);
             System.out.println(pos);
-            message = message.substring(0, pos) + "<img src=\"src/com/content7/angel.png\" width=25 height=25>"  + message.substring(pos+3);
-        }*/
+            URL imgsrc= null;
+            try {
+                imgsrc = Paths.get("C:/Users/37529/IdeaProjects/Lab_7/src/com/content7/Smile2.png").toUri().toURL();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            message = message.substring(0, pos) + "<img src='file:C:/Users/37529/IdeaProjects/Lab_7/src/com/content7/Smile2.png' alt='' name='angel' width='74' height='85' /><br />"  + message.substring(pos+3);
+        }
         String html = "<span>" + message + "</span><br/>";
         incomingText.insert(0, html);
         String text  = incomingText.toString();
